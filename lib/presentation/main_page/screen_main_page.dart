@@ -17,17 +17,18 @@ final List _pages = [
   Screen_download(),
 ];
 
-
 class ScreenMainPage extends StatelessWidget {
   const ScreenMainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      
-      body: ValueListenableBuilder(valueListenable: indexChangeNotifier, builder: (context, index, _) {
-        return _pages[index];
-      },),
+    return Scaffold(
+      body: ValueListenableBuilder(
+        valueListenable: indexChangeNotifier,
+        builder: (context, index, _) {
+          return _pages[index];
+        },
+      ),
       bottomNavigationBar: BottomNavBar(),
     );
   }
