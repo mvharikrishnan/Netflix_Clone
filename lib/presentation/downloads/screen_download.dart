@@ -1,15 +1,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netflix_clone/application/downloads/downloads_bloc.dart';
 import 'package:netflix_clone/core/constants.dart';
+import 'package:netflix_clone/core/string.dart';
 
 import 'package:netflix_clone/presentation/widgets/app_bar_widget.dart';
 
-final List<String> ImageList = [
-  "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/6DrHO1jr3qVrViUO6s6kFiAGM7.jpg"
-      'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/gLnrBoSENk32SKjHDiZv7E4zwzK.jpg'
-      'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/7qop80YfuO0BwJa1uXk1DXUUEwv.jpg'
-];
+// final List<String> ImageList = [
+//   "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/6DrHO1jr3qVrViUO6s6kFiAGM7.jpg"
+//       'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/gLnrBoSENk32SKjHDiZv7E4zwzK.jpg'
+//       'https://www.themoviedb.org/t/p/w300_and_h450_bestv2/7qop80YfuO0BwJa1uXk1DXUUEwv.jpg'
+// ];
 
 class Screen_download extends StatelessWidget {
   Screen_download({super.key});
@@ -20,6 +23,12 @@ class Screen_download extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<DownloadsBloc>(context)
+          .add(const DownloadsEvent.getDownloadsImages());
+    });
+    // BlocProvider.of<DownloadsBloc>(context)
+    //     .add(const DownloadsEvent.getDownloadsImages());
     return SafeArea(
       child: Scaffold(
           appBar: const PreferredSize(
@@ -29,9 +38,11 @@ class Screen_download extends StatelessWidget {
             ),
           ),
           body: ListView.separated(
-            padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               itemBuilder: (context, index) => _WidgetsList[index],
-              separatorBuilder: (context, index) =>SizedBox(height: 30,) ,
+              separatorBuilder: (context, index) => const SizedBox(
+                    height: 30,
+                  ),
               itemCount: _WidgetsList.length)),
     );
   }
@@ -47,13 +58,13 @@ class _SmartDownloads extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10),
       child: Row(
-        children: [
-          const Icon(
+        children: const [
+          Icon(
             Icons.settings,
             color: kWhiteColor,
           ),
           kWidth,
-          const Text('Smart Downloads')
+          Text('Smart Downloads')
         ],
       ),
     );
@@ -83,40 +94,46 @@ class Section_two extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         kHeight,
-        SizedBox(
-          width: size.width,
-          height: size.width,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              CircleAvatar(
-                radius: size.width * 0.4,
-                backgroundColor: Colors.grey.withOpacity(0.5),
-              ),
-              downloadsImageWidjet(
-                borderRadius: 10,
-                size: Size(size.width * 0.35, size.width * 0.55),
-                margin: EdgeInsets.only(left: 170,top: 50),
-                ThumbNailImage:
-                    'https://www.themoviedb.org/t/p/w220_and_h330_face/59SVNwLfoMnZPPB6ukW6dlPxAdI.jpg',
-                rotation: 20,
-              ),
-              downloadsImageWidjet(
-                  borderRadius: 10,
-                  size: Size(size.width * 0.35, size.width * 0.55),
-                  margin: EdgeInsets.only(right: 170,top: 50),
-                  ThumbNailImage:
-                      'https://www.themoviedb.org/t/p/original/5jX3p0apUG5bkMHtnKZch0xpkBS.jpg',
-                  rotation: -20),
-              downloadsImageWidjet(
-                  borderRadius: 10,
-                  size: Size(size.width * 0.45, size.width * 0.65),
-                  margin: EdgeInsets.only(bottom: 35,top: 50),
-                  ThumbNailImage:
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToH-5-jPkz134oqmSJ6q-ds0i0RqBerEUeuB7-p2p3exIMmYvkmktbf28Fbi2tBTVjTkQ&usqp=CAU',
-                  rotation: 0)
-            ],
-          ),
+        BlocBuilder<DownloadsBloc, DownloadsState>(
+          builder: (context, state) {
+            return SizedBox(
+              width: size.width,
+              height: size.width,
+              child: state.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: size.width * 0.4,
+                          backgroundColor: Colors.grey.withOpacity(0.5),
+                        ),
+                        downloadsImageWidjet(
+                          borderRadius: 10,
+                          size: Size(size.width * 0.35, size.width * 0.55),
+                          margin: const EdgeInsets.only(left: 170, top: 50),
+                          ThumbNailImage:
+                              '$imageAppend_URL${state.downloads![0].posterPath}',
+                          rotation: 20,
+                        ),
+                        downloadsImageWidjet(
+                            borderRadius: 10,
+                            size: Size(size.width * 0.35, size.width * 0.55),
+                            margin: const EdgeInsets.only(right: 170, top: 50),
+                            ThumbNailImage:
+                                '$imageAppend_URL${state.downloads![1].posterPath}',
+                            rotation: -20),
+                        downloadsImageWidjet(
+                            borderRadius: 10,
+                            size: Size(size.width * 0.45, size.width * 0.65),
+                            margin: const EdgeInsets.only(bottom: 35, top: 50),
+                            ThumbNailImage:
+                                '$imageAppend_URL${state.downloads![2].posterPath}',
+                            rotation: 0)
+                      ],
+                    ),
+            );
+          },
         ),
       ],
     );
