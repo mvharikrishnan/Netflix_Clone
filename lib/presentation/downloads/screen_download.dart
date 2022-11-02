@@ -113,7 +113,7 @@ class Section_two extends StatelessWidget {
                           size: Size(size.width * 0.35, size.width * 0.55),
                           margin: const EdgeInsets.only(left: 170, top: 50),
                           ThumbNailImage:
-                              '$imageAppend_URL${state.downloads![0].posterPath}',
+                              '$imageAppend_URL${state.downloads[0].posterPath}',
                           rotation: 20,
                         ),
                         downloadsImageWidjet(
@@ -121,14 +121,14 @@ class Section_two extends StatelessWidget {
                             size: Size(size.width * 0.35, size.width * 0.55),
                             margin: const EdgeInsets.only(right: 170, top: 50),
                             ThumbNailImage:
-                                '$imageAppend_URL${state.downloads![1].posterPath}',
+                                '$imageAppend_URL${state.downloads[1].posterPath}',
                             rotation: -20),
                         downloadsImageWidjet(
                             borderRadius: 10,
                             size: Size(size.width * 0.45, size.width * 0.65),
                             margin: const EdgeInsets.only(bottom: 35, top: 50),
                             ThumbNailImage:
-                                '$imageAppend_URL${state.downloads![2].posterPath}',
+                                '$imageAppend_URL${state.downloads[2].posterPath}',
                             rotation: 0)
                       ],
                     ),

@@ -17,17 +17,13 @@ class DownloadsRepositry implements IDownloadsRepo {
       final Response response =
           await Dio(BaseOptions()).get(ApiEndPoints.downloads);
       if (response.statusCode == 200 || response.statusCode == 201) {
-
+        // print(response.data);
        final downloadsList = (response.data['results'] as List).map((e){
           return Downloads.fromJson(e as Map<String, dynamic>);
         }).toList();
 
-        // final List<Downloads> downloadsList = [];
-        // log(response.data);
-        // for (final raw in response.data) {
-        //   downloadsList.add(Downloads.fromJson(raw as Map<String, dynamic>));
-        // }
-        print(downloadsList);
+        
+        // print(downloadsList);
         return Right(downloadsList);
       } else {
         return const Left(MainFailure.serverFailure());

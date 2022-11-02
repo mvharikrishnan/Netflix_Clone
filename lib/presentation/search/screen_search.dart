@@ -2,15 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netflix_clone/application/search/search_bloc.dart';
 import 'package:netflix_clone/core/constants.dart';
+import 'package:netflix_clone/domain/downloads/core/debounce/debounce.dart';
 import 'package:netflix_clone/presentation/search/widgets/search_idel.dart';
 import 'package:netflix_clone/presentation/search/widgets/search_result_page.dart';
 
 class Screen_Search extends StatelessWidget {
-  const Screen_Search({super.key});
-
+  Screen_Search({super.key});
+  final _debouncer = Debouncer(milliseconds: 1 * 1000);
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<SearchBloc>(context).add(Initialize());
+    });
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -29,10 +35,27 @@ class Screen_Search extends StatelessWidget {
               ),
               style: const TextStyle(color: kWhiteColor),
               backgroundColor: Colors.grey.withOpacity(0.4),
+              onChanged: (value) {
+                if(value.isEmpty){
+                  return;
+                }
+                _debouncer.run(() {
+                  BlocProvider.of<SearchBloc>(context)
+                      .add(SearchMovie(movieQuery: value));
+                });
+              },
             ),
             kHeight,
-          //  const Expanded(child:  SearchIdleWidget()),
-          const Expanded(child:  Search_result_Widget()),
+            Expanded(child: BlocBuilder<SearchBloc, SearchState>(
+              builder: (context, state) {
+                if (state.searchResultList.isEmpty) {
+                  return const SearchIdleWidget();
+                } else {
+                  return const Search_result_Widget();
+                }
+              },
+            )),
+            // const Expanded(child:  Search_result_Widget()),
           ],
         ),
       )),
