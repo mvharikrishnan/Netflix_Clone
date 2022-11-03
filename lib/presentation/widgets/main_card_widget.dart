@@ -2,7 +2,9 @@ import 'package:netflix_clone/core/constants.dart';
 import 'package:flutter/material.dart';
 
 class MainCardWidget extends StatelessWidget {
+  final String imageUrl;
   const MainCardWidget({
+    required this.imageUrl,
     Key? key,
   }) : super(key: key);
 
@@ -14,10 +16,9 @@ class MainCardWidget extends StatelessWidget {
       height: 200,
       decoration: BoxDecoration(
         borderRadius: KRadius,
-        image: const DecorationImage(
+        image: DecorationImage(
           fit: BoxFit.cover,
-          image: NetworkImage(
-              'https://www.themoviedb.org/t/p/original/nUHk72rSGDuG2Lz22zJAYCyxq7g.jpg'),
+          image: NetworkImage(imageUrl),
         ),
       ),
     );

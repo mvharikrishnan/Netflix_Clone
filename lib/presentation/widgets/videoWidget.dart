@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/core/constants.dart';
+
 class VideoWidget extends StatelessWidget {
+  final String ImageUrl;
   const VideoWidget({
+    required this.ImageUrl,
     Key? key,
   }) : super(key: key);
 
@@ -12,11 +15,12 @@ class VideoWidget extends StatelessWidget {
       children: [
         Container(
           height: 200,
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                  image: NetworkImage(
-                      "https://www.themoviedb.org/t/p/original/mwctjyYvK0lPNInt1jdTQGvUByk.jpg"))),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: NetworkImage(ImageUrl),
+            ),
+          ),
         ),
         Positioned(
           right: 10,

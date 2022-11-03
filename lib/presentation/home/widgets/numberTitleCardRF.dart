@@ -5,9 +5,10 @@ import 'package:netflix_clone/presentation/widgets/main_title.dart';
 import 'numberCard.dart';
 class NumberTitleCardRF extends StatelessWidget {
   const NumberTitleCardRF({
+    required this.postersList,
     Key? key,
   }) : super(key: key);
-
+final List<String> postersList;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,10 +22,10 @@ class NumberTitleCardRF extends StatelessWidget {
             child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) => Number_Card(
-                      Index: index + 1,
+                      Index: index + 1, imageURL: postersList[index],
                     ),
                 separatorBuilder: (context, index) => kWidth,
-                itemCount: 20),
+                itemCount: postersList.length),
           ),
         ),
       ],
